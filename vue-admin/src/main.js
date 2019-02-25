@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import './assets/less/index.less'
+import './styles/index.less'
 import echarts from 'echarts'
 
 Vue.config.productionTip = false
