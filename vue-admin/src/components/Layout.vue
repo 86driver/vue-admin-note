@@ -11,13 +11,13 @@
         <i-col :xs="24" :sm="6" :md="5">
           <Row>
             <i-col span="8">
-              <Dropdown>
-                <Avatar icon="ios-person" />
+              <Dropdown @on-click="logout">
+                <Avatar src="https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar" />
                 <DropdownMenu slot="list">
                   <DropdownItem>我的主页</DropdownItem>
                   <DropdownItem>我的收藏</DropdownItem>
                   <DropdownItem>设置</DropdownItem>
-                  <DropdownItem :divided=true>退出登录</DropdownItem>
+                  <DropdownItem name="logout" :divided=true>退出登录</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </i-col>
@@ -81,16 +81,22 @@ export default {
       activeName: this.$route.path
     }
   },
+  watch: {},
   created() {
     this.activeName = this.$route.path
   },
-  components: {},
-  computed: {},
   methods: {
     // 屏幕小于768px时的导航栏时间
     toItems(name) {
       this.$router.push({path: name})
       this.activeName = this.$route.path // 高亮同步
+    },
+    // 后台提供接口有问题， 模拟注销
+    logout(name) {
+      if (name === 'logout') {
+        this.$storage.clear()
+        this.$router.push({path: `/${name}`})
+      }
     }
   }
 }

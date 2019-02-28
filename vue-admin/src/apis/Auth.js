@@ -2,7 +2,9 @@ import request from '../utils/request'
 
 const URL = {
   LOGIN: '/auth/login',
-  REGISTER: '/auth/register'
+  REGISTER: '/auth/register',
+  LOGOUT: '/auth/logout',
+  GET_INFO: '/auth'
 }
 
 export default{
@@ -17,5 +19,11 @@ export default{
       username,
       password
     })
+  },
+  logout() {
+    return request(URL.LOGOUT)
+  },
+  getInfo({name}) {
+    return request(URL.GET_INFO)
   }
 }
