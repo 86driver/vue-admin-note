@@ -129,8 +129,14 @@ export default {
   position: fixed;
   top: 60px;
   left: 240px;
+  bottom: 0;
+  right: 0;
   padding: 20px;
+  margin: 20px;
+  border-radius: 5px;
+  border: 1px solid #dcdee2;
   transition: all 0.2s ease-in-out;
+  background: #fff;
 }
 .content-expand{
   left: 84px;

@@ -3,16 +3,15 @@
 </template>
 
 <script>
-  export default {
-    name: '',
-    data () {
-      return {
-      }
-    },
-    components: {},
-    computed: {},
-    methods: {}
-  }
+export default {
+  data () {
+    return {
+    }
+  },
+  components: {},
+  computed: {},
+  methods: {}
+}
 </script>
 
 <style lang='less' scoped>
