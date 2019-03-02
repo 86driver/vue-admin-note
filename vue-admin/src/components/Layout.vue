@@ -41,7 +41,7 @@
       </Row>
     </Header>
     <Layout>
-      <Sider class="sider" width="240" collapsible v-model="isCollapsed" :class="{ 'hide': isCollapsed }">
+      <Sider class="sider" width="240" v-model="isCollapsed" :class="{ 'hide': isCollapsed }">
         <Menu theme="dark" :active-name="activeName">
           <MenuItem name="/notebooks" to="/notebooks">
             <Icon type="ios-search"></Icon>
@@ -49,7 +49,7 @@
           </MenuItem>
           <MenuItem name="/notes" to="/notes">
             <Icon type="ios-apps"></Icon>
-            <span>笔记列表</span></MenuItem>
+            <span>笔记详情</span></MenuItem>
           <MenuItem name="/trash" to="/trash">
             <Icon type="ios-bookmark"></Icon>
             <span>回收站</span></MenuItem>
@@ -60,28 +60,37 @@
         <Icon type="md-menu" size="36" />
         <DropdownMenu slot="list">
           <DropdownItem name="/notebooks">笔记本列表</DropdownItem>
-          <DropdownItem name="/notes">笔记列表</DropdownItem>
+          <DropdownItem name="/notes">笔记详情</DropdownItem>
           <DropdownItem name="/trash">回收站</DropdownItem>
         </DropdownMenu>
       </Dropdown>
       <Content class="content" :class="{'content-expand': isCollapsed}">
         <slot></slot>
-        <router-view></router-view>
+        <keep-alive>
+          <router-view/>
+        </keep-alive>
       </Content>
     </Layout>
   </Layout>
 </template>
 
 <script>
+import Auth from '../apis/Auth.js'
 export default {
   data() {
     return {
       news: 1,
       isCollapsed: false,
-      activeName: this.$route.path
+      activeName: ''
     }
   },
-  watch: {},
+  watch: {
+    $route(to, from) {
+      if (to.path === '/notebooks' || to.path === '/notes' || to.path === '/trash') {
+        this.activeName = this.$route.path
+      }
+    }
+  },
   created() {
     this.activeName = this.$route.path
   },
@@ -91,11 +100,13 @@ export default {
       this.$router.push({path: name})
       this.activeName = this.$route.path // 高亮同步
     },
-    // 后台提供接口有问题， 模拟注销
+    // 注销登录
     logout(name) {
       if (name === 'logout') {
-        this.$storage.clear()
-        this.$router.push({path: `/${name}`})
+        Auth.logout().then(res => {
+          this.$storage.clear()
+          this.$router.push('/login')
+        })
       }
     }
   }
@@ -137,8 +148,8 @@ export default {
   left: 240px;
   bottom: 0;
   right: 0;
-  padding: 20px;
-  margin: 20px;
+  padding: 10px;
+  margin: 10px;
   border-radius: 5px;
   border: 1px solid #dcdee2;
   transition: all 0.2s ease-in-out;

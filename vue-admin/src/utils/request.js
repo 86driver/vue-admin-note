@@ -1,5 +1,7 @@
 import axios from 'axios'
+
 axios.defaults.baseURL = '//note-server.hunger-valley.com'
+axios.defaults.withCredentials = true
 
 export default function request(url, type = 'GET', data = {}) {
   return new Promise((resolve, reject) => {

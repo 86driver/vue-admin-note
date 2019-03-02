@@ -23,7 +23,7 @@ export default{
   logout() {
     return request(URL.LOGOUT)
   },
-  getInfo({name}) {
+  getInfo() {
     return request(URL.GET_INFO)
   }
 }

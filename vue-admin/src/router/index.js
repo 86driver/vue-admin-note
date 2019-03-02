@@ -33,7 +33,7 @@ const router = new Router({
       ]
     },
     {
-      path: 'login',
+      path: '/login',
       component: Login
     }
   ]
