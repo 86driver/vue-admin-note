@@ -13,7 +13,7 @@ const router = new Router({
     {
       path: '/',
       component: Layout,
-      redirect: 'notebooks',
+      redirect: '/login',
       meta: {
         requireAuth: true
       },

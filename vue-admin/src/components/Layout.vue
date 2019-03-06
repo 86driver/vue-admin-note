@@ -65,7 +65,6 @@
         </DropdownMenu>
       </Dropdown>
       <Content class="content" :class="{'content-expand': isCollapsed}">
-        <slot></slot>
         <keep-alive>
           <router-view/>
         </keep-alive>
@@ -146,14 +145,10 @@ export default {
   position: fixed;
   top: 60px;
   left: 240px;
-  bottom: 0;
   right: 0;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 5px;
-  border: 1px solid #dcdee2;
+  bottom: 0;
   transition: all 0.2s ease-in-out;
-  background: #fff;
+  background: #fbfbfb;
 }
 .content-expand{
   left: 84px;

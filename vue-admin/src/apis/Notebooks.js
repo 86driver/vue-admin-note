@@ -3,7 +3,8 @@ import Auth from './Auth'
 
 const URL = {
   GET: '/notebooks',
-  ADD: '/notebooks'
+  ADD: '/notebooks',
+  DELETE: '/notebooks/:notebookId'
 }
 
 export default {
@@ -28,5 +29,8 @@ export default {
             .catch((error) => {
               console.log(error)
             })
+  },
+  deletenotebook({notebookId}) {
+    return request(URL.DELETE.replace(':notebookId', notebookId), 'DELETE')
   }
 }

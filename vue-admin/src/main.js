@@ -4,17 +4,18 @@ import router from './router'
 import './styles/index.less'
 import echarts from 'echarts'
 import iview from 'iview'
-import Layout from 'components/Layout'
 import storage from 'good-storage'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
-Vue.component('my-layout', Layout)
+Vue.use(mavonEditor) // 富文本编辑器
 Vue.use(iview, {
   transfer: true
 })
 
 Vue.config.productionTip = false
-Vue.prototype.$echarts = echarts
-Vue.prototype.$storage = storage
+Vue.prototype.$echarts = echarts // echarts插件
+Vue.prototype.$storage = storage // localStorage插件
 
 /* eslint-disable no-new */
 new Vue({

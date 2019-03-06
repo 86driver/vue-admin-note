@@ -1,36 +1,29 @@
 <template>
-  <my-layout>
-    <Layout>
-      <Header>
-        <i-button type="success" @click="modal1 = true">新建笔记本</i-button>
-        <Modal v-model="modal1" title="新建笔记本" @on-ok="modalOK" @on-cancel="modalCancel">
-          <i-form></i-form>
-          <i-input max-length="5" v-model.trim="newBooksTitle" placeholder="笔记本标题不能为空，且不超过30个字符"></i-input>
-        </Modal>
-        <i-button type="success">导出笔记</i-button>
-      </Header>
-      <Content>
-        <i-table :columns="columns1" :data="simpleBooks"></i-table>
-      </Content>
-      <Footer>
-        <Page show-elevator show-total :total="totalCount" :page-size="pageSize" @on-change="changePage" />
-      </Footer>
-    </Layout>
-  </my-layout>
+  <Layout class="layout">
+    <Header>
+      <i-button type="success" @click="modal1 = true">新建笔记本</i-button>
+      <Modal v-model="modal1" title="新建笔记本" @on-ok="modalOK" @on-cancel="modalCancel">
+        <i-input max-length="5" v-model.trim="newBooksTitle" placeholder="笔记本标题不能为空，且不超过30个字符"></i-input>
+      </Modal>
+      <i-button type="success">导出笔记</i-button>
+    </Header>
+    <Content>
+      <i-table highlight-row @on-current-change="seclectBook" :loading="tableLoading" :columns="columns1" :data="simpleBooks"></i-table>
+    </Content>
+    <Footer>
+      <Page show-elevator show-total :total="totalCount" :page-size="pageSize" @on-change="changePage" />
+    </Footer>
+  </Layout>
 </template>
 
 <script>
 import Notebooks from '../apis/Notebooks'
 import moment from 'moment'
+import Auth from '../apis/Auth.js'
 export default {
   data () {
     return {
       columns1: [
-        {
-          title: '作者',
-          key: 'author',
-          align: 'center'
-        },
         {
           title: '笔记本名称',
           key: 'name',
@@ -55,6 +48,12 @@ export default {
             return h('Button', {
               props: {
                 type: 'primary'
+              },
+              on: {
+                click: () => {
+                  event.stopPropagation()
+                  this.deleteNotebook(params.row.id)
+                }
               }
             }, '删除')
           }
@@ -65,7 +64,8 @@ export default {
       pageSize: 8,
       simpleBooks: [],
       modal1: false,
-      newBooksTitle: ''
+      newBooksTitle: '',
+      tableLoading: false
     }
   },
   created() {
@@ -76,7 +76,7 @@ export default {
       Notebooks.getNotebooks()
         .then((res) => {
           this.totalCount = res.data.length
-          this._changeArray(res.data)
+          this._changeArray(res.data.reverse())
           this.simpleBooks = this.books.slice(0, this.pageSize)
         })
     },
@@ -85,6 +85,9 @@ export default {
         let obj = {}
         Object.keys(value).forEach((key) => {
           switch (key) {
+            case 'id':
+              obj.id = value[key]
+              break
             case 'userId':
               obj.author = value[key]
               break
@@ -117,6 +120,7 @@ export default {
       } else {
         Notebooks.addNotebooks({title: this.newBooksTitle})
           .then((res) => {
+            this.books = [] // 添加笔记时要把之前笔记本清空
             this._uppdateBooks()
             this.$Message.success('笔记已经添加到列表中了~')
           })
@@ -128,12 +132,42 @@ export default {
     },
     modalCancel() {
       this.newBooksTitle = '' // 清空之前输入的内容
+    },
+    deleteNotebook(id) {
+      this.tableLoading = true
+      Auth.getInfo()
+        .then((res) => {
+          Notebooks.deletenotebook({notebookId: id})
+            .then((res) => {
+              this.books = [] // 笔记本清空
+              this.$Message.success('笔记本删除成功')
+              this._uppdateBooks()
+              this.tableLoading = false
+            })
+            .catch((error) => {
+              this.tableLoading = false
+              this.$Message.error(error.msg)
+            })
+        })
+        .catch((error) => {
+          this.$Message.error(error.msg)
+        })
+    },
+    seclectBook(book) {
+      this.$router.push({path: 'notes', query: { notebookId: book.id }})
     }
   }
 }
 </script>
 
 <style lang='less' scoped>
+.layout{
+  margin: 10px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dcdee2;
+}
 .ivu-layout-header{
   height: 50px;
   padding: 0 10px;
