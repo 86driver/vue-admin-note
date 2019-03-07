@@ -1,5 +1,4 @@
 import request from '../utils/request'
-import Auth from './Auth'
 
 const URL = {
   GET: '/notes/from/:notebookId',
@@ -10,26 +9,10 @@ const URL = {
 
 export default {
   getAllNotes({notebookId}) {
-    return Auth.getInfo()
-            .then(res => {
-              if (res.isLogin) {
-                return request(URL.GET.replace(':notebookId', notebookId))
-              }
-            })
-            .catch((error) => {
-              console.log(error)
-            })
+    return request(URL.GET.replace(':notebookId', notebookId))
   },
   addNote({notebookId}, {title, content}) {
-    return Auth.getInfo()
-            .then(res => {
-              if (res.isLogin) {
-                return request(URL.ADD.replace(':notebookId', notebookId), 'POST', {title, content})
-              }
-            })
-            .catch((error) => {
-              console.log(error)
-            })
+    return request(URL.ADD.replace(':notebookId', notebookId), 'POST', {title, content})
   },
   updateNote({noteId, title, content}) {
     return request(URL.UPDATE.replace(':noteId', noteId), 'PATCH', {title, content})

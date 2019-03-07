@@ -4,7 +4,9 @@ import Layout from 'components/Layout'
 import Notebooks from '../views/Notebooks'
 import Notes from '../views/Notes'
 import Trash from '../views/Trash'
+import Charts from '../views/Charts'
 import Login from '../views/Login'
+import Auth from '../apis/Auth'
 
 Vue.use(Router)
 
@@ -29,6 +31,10 @@ const router = new Router({
         {
           path: 'trash',
           component: Trash
+        },
+        {
+          path: 'charts',
+          component: Charts
         }
       ]
     },
@@ -41,12 +47,18 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(res => res.meta.requireAuth)) {
-    // 这里this.a.app 相当于 Vue中的this
-    if (this.a.app.$storage.get('user')) {
-      next()
-    } else {
-      next('/login')
-    }
+    // 登录权限验证
+    Auth.getInfo()
+      .then((res) => {
+        if (res.isLogin === true) {
+          next()
+        } else {
+          next('/login')
+        }
+      })
+      .catch(() => {
+        alert('出错了')
+      })
   } else {
     next()
   }

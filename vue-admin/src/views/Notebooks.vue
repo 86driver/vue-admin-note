@@ -5,10 +5,16 @@
       <Modal v-model="modal1" title="新建笔记本" @on-ok="modalOK" @on-cancel="modalCancel">
         <i-input max-length="5" v-model.trim="newBooksTitle" placeholder="笔记本标题不能为空，且不超过30个字符"></i-input>
       </Modal>
-      <i-button type="success">导出笔记</i-button>
+      <i-button @click="_exportData" type="success">导出笔记</i-button>
     </Header>
     <Content>
-      <i-table highlight-row @on-current-change="seclectBook" :loading="tableLoading" :columns="columns1" :data="simpleBooks"></i-table>
+      <i-table
+        highlight-row
+        @on-current-change="seclectBook"
+        :loading="tableLoading"
+        :columns="columns1"
+        :data="simpleBooks"
+        ref="table"></i-table>
     </Content>
     <Footer>
       <Page show-elevator show-total :total="totalCount" :page-size="pageSize" @on-change="changePage" />
@@ -19,7 +25,6 @@
 <script>
 import Notebooks from '../apis/Notebooks'
 import moment from 'moment'
-import Auth from '../apis/Auth.js'
 export default {
   data () {
     return {
@@ -135,26 +140,25 @@ export default {
     },
     deleteNotebook(id) {
       this.tableLoading = true
-      Auth.getInfo()
+      Notebooks.deletenotebook({notebookId: id})
         .then((res) => {
-          Notebooks.deletenotebook({notebookId: id})
-            .then((res) => {
-              this.books = [] // 笔记本清空
-              this.$Message.success('笔记本删除成功')
-              this._uppdateBooks()
-              this.tableLoading = false
-            })
-            .catch((error) => {
-              this.tableLoading = false
-              this.$Message.error(error.msg)
-            })
+          this.books = [] // 笔记本清空
+          this.$Message.success('笔记本删除成功')
+          this._uppdateBooks()
+          this.tableLoading = false
         })
         .catch((error) => {
+          this.tableLoading = false
           this.$Message.error(error.msg)
         })
     },
     seclectBook(book) {
       this.$router.push({path: 'notes', query: { notebookId: book.id }})
+    },
+    _exportData() {
+      this.$refs.table.exportCsv({
+        filename: '笔记本'
+      })
     }
   }
 }

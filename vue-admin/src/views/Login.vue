@@ -118,7 +118,6 @@ export default {
         if (valid) {
           Auth.login(this.loginInfo)
             .then(res => {
-              this.$storage.set('user', this.loginInfo)
               this.buttonLoading = false
               this.$refs[name].resetFields()
               this.$router.push('/notebooks')
@@ -141,7 +140,6 @@ export default {
         if (valid) {
           Auth.register(this.registerForm)
             .then(res => {
-              this.$storage.set('user', this.registerForm)
               this.buttonLoading = false
               this.$refs[name].resetFields()
               this.$router.push('/notebooks')

@@ -47,7 +47,6 @@
 <script>
 import Notebooks from '../apis/Notebooks'
 import Notes from '../apis/Notes'
-import Auth from '../apis/Auth'
 export default {
   data () {
     return {
@@ -153,50 +152,46 @@ export default {
       this.newBooksTitle = ''
     },
     _saveNote() {
-      let _that = this // 因为要使用到setTimout, 所以事先保存this
       this.saveLoading = true
+      let _that = this // 因为要使用到setTimout, 所以事先保存this
       // 2秒内不能再次点击
       setTimeout(function() {
         _that.saveLoading = false
       }, 2000)
+      if (this.noteDetail.length === 0) {
+        this.$Message.warning('该笔记本下没有笔记')
+        return false
+      }
       if (this.editContent === this.noteContent) {
         this.$Message.warning('未做任何修改')
         return false
       } else {
-        Auth.getInfo()
+        let _note = this.noteDetail[this.num]
+        Notes.updateNote({noteId: _note.id, title: _note.title, content: this.editContent})
           .then((res) => {
-            let _note = this.noteDetail[this.num]
-            Notes.updateNote({noteId: _note.id, title: _note.title, content: this.editContent})
-              .then((res) => {
-                _note.content = this.editContent // 视觉上保存
-                this.$Message.success('修改成功')
-              })
-              .catch((error) => {
-                this.$Message.error(error.msg)
-              })
+            _note.content = this.editContent // 视觉上保存
+            this.$Message.success('修改成功')
           })
           .catch((error) => {
-                this.$Message.error(error.msg)
+            this.$Message.error(error.msg)
           })
       }
     },
     _deleteNote() {
-      let _that = this // 因为要使用到setTimout, 所以事先保存this
       this.deleteLoading = true
+      let _that = this // 因为要使用到setTimout, 所以事先保存this
       setTimeout(function() {
         _that.deleteLoading = false
       }, 2000)
-      Auth.getInfo()
+      if (this.noteDetail.length === 0) {
+        this.$Message.warning('该笔记本下没有笔记')
+        return false
+      }
+      let _note = this.noteDetail[this.num]
+      Notes.deleteNote({noteId: _note.id})
         .then((res) => {
-          let _note = this.noteDetail[this.num]
-          Notes.deleteNote({noteId: _note.id})
-            .then((res) => {
-              this.noteDetail.splice(this.num, 1) // 视觉上删除笔记
-              this.$Message.success('该笔记已放入回收站')
-            })
-            .catch((error) => {
-              this.$Message.error(error.msg)
-            })
+          this.noteDetail.splice(this.num, 1) // 视觉上删除笔记
+          this.$Message.success('该笔记已放入回收站')
         })
         .catch((error) => {
           this.$Message.error(error.msg)
