@@ -17,7 +17,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
-      extract: true,
+      extract: false, //修复图标不显示问题
       usePostCSS: true
     })
   },
