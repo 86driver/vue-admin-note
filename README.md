@@ -36,6 +36,7 @@
 >* `axios`
 >* `vue全家桶：由于demo需要保存的数据不多，所以没有用到vuex`
 >* `mavonEditor`
+>* `ECharts`
 >* `iview UI框架` </br></br>
 
 ## 发现BUG可以通过下面联系方式联系我：
