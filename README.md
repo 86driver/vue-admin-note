@@ -14,6 +14,23 @@
 
 >>回收站页：在这个页面您可以看到您之前在笔记详情页面删除的笔记，在这个页面您可以恢复笔记 需要注意的是在回收站删除的笔记不可恢复
 
+## 展示
+#### 登录页面
+![登录页面](https://github.com/86driver/Demo-imgs/blob/master/vue-admin-note/loginPage.png)
+#### 笔记本列表页
+![笔记本列表页](https://github.com/86driver/Demo-imgs/blob/master/vue-admin-note/notebookPage.png)
+#### 笔记详情页
+![笔记详情页](https://github.com/86driver/Demo-imgs/blob/master/vue-admin-note/noteDetailPage.png)
+#### 回收站页面
+![回收站页面](https://github.com/86driver/Demo-imgs/blob/master/vue-admin-note/trashPage.png)
+#### 统计页面
+![统计页面](https://github.com/86driver/Demo-imgs/blob/master/vue-admin-note/chartPage.png)
+#### 项目相关（抽屉）
+![项目相关](https://github.com/86driver/Demo-imgs/blob/master/vue-admin-note/about1.png)
+#### 响应式展示
+![响应式展示](https://github.com/86driver/Demo-imgs/blob/master/vue-admin-note/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B1%95%E7%A4%BA.png)
+
+
 ## 所用知识
 >* `响应式布局：header页面和sider页面的响应式布局 当浏览器窗口小于一定尺寸的时候侧边导航栏消失，出现类似于手机端的导航按钮`
 >* `axios`
